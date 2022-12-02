@@ -5,18 +5,67 @@
 
     <label>Password:</label>
     <input type="password" required v-model="password">
-    </form>
+
+    <label>Role:</label>
+    <select v-model="role">
+        <option value="developer">Web Developer</option>
+        <option value="designer">Web Designer</option>
+    </select>
+
+    <label>Skills:</label>
+    <input type="text" v-model="tempSkill" @keyup.alt="addSkill">
+    <div v-for="skill in skills" :key="skill" class="pill">
+        <span @click="deleteSkill(skill)">
+            {{skill}}
+        </span>
+    </div>
+
+    <div class="terms">
+        <input type="checkbox" v-model="terms" required>
+        <label>Accept Terms & Conditions</label>
+    </div>
+
+  </form>
 
     <p>E-Mail: {{email}}</p>
     <p>Password: {{password}}</p>
-</template>
+    <p>Role: {{role}}</p>
+    <p>Terms accepted : {{terms}}</p>
 
+</template>
+ 
 <script>
 export default {
     data(){
         return {
             email: '',
             password: '',
+            role: '',
+            terms: false,
+            tempSkill: '',
+            skills: []
+        }
+    },
+    methods: {
+        addSkill(e){
+            if(e.key === ',' && this.tempSkill) {
+                if (!this.skills.includes(this.tempSkill)){
+                    this.skills.push(this.tempSkill)
+                }
+                this.tempSkill = ''
+            }
+        },
+        deleteSkill(skill){
+            this.skills = this.skills.filter((item) => {
+                return skill !== item
+            })
+
+
+            // var index = this.skills.indexOf(skill);
+            // if(index !== -1){
+            //     this.skills.splice(index,1)
+            // }
+
         }
     }
 
@@ -41,7 +90,7 @@ label{
     letter-spacing: 1px;
     font-weight: bold;
 }
-input{
+input, select{
     display:block;
     padding: 10px 6px;
     width: 100%;
@@ -49,5 +98,24 @@ input{
     border: none;
     border-bottom: 1px solid #ddd;
     color: #555;
+}
+input[type="checkbox"]{
+    display: inline-block;
+    width: 16px;
+    margin: 0 10px 0 0;
+    position: relative;
+    top: 2px;
+}
+.pill{
+    display: inline-block;
+    margin: 20px 10px 0 0;
+    padding: 6px 12px;
+    background: #eee;
+    border-radius: 20px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    color: #777;
+    cursor: pointer;
 }
 </style>
